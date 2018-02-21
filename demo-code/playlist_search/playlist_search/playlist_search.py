@@ -40,7 +40,6 @@ def index():
         record = {'q': request.args.get('question'),
                   'title': search_results[0]['title'] if search_results else None,
                   'id': search_results[0]['id'] if search_results else None}
-        print(record)
         history.append(record)
         session.modified = True  # Manually set to True since list.append won't be a update.
 
