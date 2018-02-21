@@ -26,7 +26,7 @@
         {% for record in search_history|reverse %}
           <li><b>{{ record.q }}</b>:
           {% if record.id %}
-            <a href="https://www.kkbox.com/tw/en/playlist/{{ record.id }}" target="_blank">
+            <a href="https://www.kkbox.com/tw/tc/playlist/{{ record.id }}" target="_blank">
               {{ record.title }}
             </a>
           {% else %}
