@@ -12,22 +12,32 @@ app.config.update(SECRET_KEY=urandom(24),
                   TOKEN_FILE='./token.pkl')
 
 
-def get_token(reset=False):
-    if not reset and path.exists(app.config['TOKEN_FILE']):
-        with open(app.config['TOKEN_FILE'], 'rb') as f:
+def get_token(token_file, client_id, client_secret):
+    """Helper function for getting the token.
+
+    If the specified file exists, try to load it with pickle.
+    Else use the given client ID and Secret to request the token.
+    """
+    if path.exists(token_file):
+        with open(token_file, 'rb') as f:
             return pickle.load(f)
     else:
-        auth = KKBOXOAuth(app.config['KKBOX_CLIENT_ID'], app.config['KKBOX_CLIENT_SECRET'])
+        auth = KKBOXOAuth(client_id, client_secret)
         token = auth.fetch_access_token_by_client_credentials()
-        with open(app.config['TOKEN_FILE'], 'wb') as f:
+        with open(token_file, 'wb') as f:
             pickle.dump(token, f)
         return token
 
 
 def search_playlists(token, keyword):
+    """Search playlists using the given keyword.
+
+    This function returns a list of playlist object directly.
+    """
     kkboxapi = KKBOXAPI(token)
-    data = kkboxapi.search_fetcher.search(request.args.get('question'),
-                                          types=['playlist'], terr='TW')
+    data = kkboxapi.search_fetcher.search(
+            request.args.get('question'),
+            types=['playlist'], terr='TW')
     return data['playlists']['data']
 
 
@@ -36,7 +46,10 @@ def index():
     question = request.args.get('question')
     history = session.setdefault('history', list())
     if question:
-        search_results = search_playlists(get_token(), question)
+        search_results = search_playlists(get_token(app.config['TOKEN_FILE'],
+                                                    app.config['KKBOX_CLIENT_ID'],
+                                                    app.config['KKBOX_CLIENT_SECRET']),
+                                          question)
         record = {'q': request.args.get('question'),
                   'title': search_results[0]['title'] if search_results else None,
                   'id': search_results[0]['id'] if search_results else None}
