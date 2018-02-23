@@ -44,19 +44,19 @@ def search_playlists(token, keyword):
 
 @app.route('/', methods=['GET'])
 def index():
-    question = request.args.get('question')
     history = session.setdefault('history', list())
+    question = request.args.get('question')
     if question:
         token = get_token(app.config['TOKEN_FILE'],
                           app.config['KKBOX_CLIENT_ID'],
                           app.config['KKBOX_CLIENT_SECRET'])
-        search_results = search_playlists(token, question)
-        record = {'q': request.args.get('question'),
-                  'title': search_results[0]['title'] if search_results else None,
-                  'id': search_results[0]['id'] if search_results else None}
+        results = search_playlists(token, question)
+        record = {'q': question,
+                  'title': results[0]['title'] if results else None,
+                  'id': results[0]['id'] if results else None}
         history.append(record)
-        session.modified = True  # Manually set to True since list.append won't be a update.
-
+        # Manually set to True since list.append won't be a update.
+        session.modified = True
         return render_template('index.html',
                                search_history=history,
                                playlist_id=record['id'])
