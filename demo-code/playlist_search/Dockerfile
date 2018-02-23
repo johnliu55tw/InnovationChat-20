@@ -3,7 +3,7 @@ MAINTAINER John Liu "johnliu@kkbox.com"
 COPY . /app
 RUN pip install /app
 
-RUN mkdir -p /work/resources
+RUN mkdir -p /work
 WORKDIR /work
 
 ENV FLASK_APP playlist_search
