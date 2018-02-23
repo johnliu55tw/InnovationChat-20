@@ -36,8 +36,9 @@ def search_playlists(token, keyword):
     """
     kkboxapi = KKBOXAPI(token)
     data = kkboxapi.search_fetcher.search(
-            request.args.get('question'),
-            types=['playlist'], terr='TW')
+            keyword,
+            types=['playlist'],
+            terr='TW')
     return data['playlists']['data']
 
 
