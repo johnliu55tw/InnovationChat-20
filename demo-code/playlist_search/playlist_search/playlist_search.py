@@ -46,10 +46,10 @@ def index():
     question = request.args.get('question')
     history = session.setdefault('history', list())
     if question:
-        search_results = search_playlists(get_token(app.config['TOKEN_FILE'],
-                                                    app.config['KKBOX_CLIENT_ID'],
-                                                    app.config['KKBOX_CLIENT_SECRET']),
-                                          question)
+        token = get_token(app.config['TOKEN_FILE'],
+                          app.config['KKBOX_CLIENT_ID'],
+                          app.config['KKBOX_CLIENT_SECRET'])
+        search_results = search_playlists(token, question)
         record = {'q': request.args.get('question'),
                   'title': search_results[0]['title'] if search_results else None,
                   'id': search_results[0]['id'] if search_results else None}
