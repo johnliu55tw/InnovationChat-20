@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config.update(SECRET_KEY=urandom(24),
                   KKBOX_CLIENT_ID='d6f84592d791d7fb7c0ca3c54d9e3a78',
                   KKBOX_CLIENT_SECRET='cc2e65a48702968646c23ebc6e6de3ee',
-                  TOKEN_FILE='resources/token.pkl')
+                  TOKEN_FILE='./token.pkl')
 
 
 def get_token(reset=False):
