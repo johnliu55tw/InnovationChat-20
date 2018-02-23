@@ -35,7 +35,7 @@ def search_playlists(token, keyword):
 def index():
     question = request.args.get('question')
     history = session.setdefault('history', list())
-    if question is not None:
+    if question:
         search_results = search_playlists(get_token(), question)
         record = {'q': request.args.get('question'),
                   'title': search_results[0]['title'] if search_results else None,
